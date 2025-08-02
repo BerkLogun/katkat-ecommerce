@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Loading...</title>
+    <meta name="description" id="page-description" content="">
+    <meta name="keywords" id="page-keywords" content="">
+    
+    <!-- Favicon -->
+    <link rel="icon" id="favicon" href="" type="image/x-icon">
+    
+    <!-- Google Analytics -->
+    <script id="google-analytics" async src=""></script>
+    
+    <!-- Facebook Pixel -->
+    <script id="facebook-pixel"></script>
+    
+    <!-- Custom CSS will be injected here -->
+    <style id="custom-css"></style>
+    
+    <!-- Base Styles -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-size: 1.2em;
+            color: #666;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-right: 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Dynamic theme variables */
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #e74c3c;
+            --background-color: #f8f9fa;
+            --text-color: #333333;
+            --header-bg: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        }
+
+        /* Header Styles */
+        .header {
+            background: var(--header-bg);
+            color: white;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .store-info h1 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .store-description {
+            opacity: 0.9;
+            font-size: 0.9em;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        .nav-menu a:hover {
+            opacity: 0.8;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.5em;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 80vh;
+        }
+
+        /* Search and Filters */
+        .search-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .search-btn {
+            padding: 12px 24px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .search-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+        }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .products-grid.grid {
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        }
+
+        .products-grid.list {
+            grid-template-columns: 1fr;
+        }
+
+        .products-grid.masonry {
+            columns: 3;
+            column-gap: 30px;
+        }
+
+        .products-grid.masonry .product-card {
+            break-inside: avoid;
+            margin-bottom: 30px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            color: #999;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-name {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+
+        .product-description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .product-price {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+        }
+
+        .product-stock {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .add-to-cart-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .add-to-cart-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        .add-to-cart-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 40px;
+        }
+
+        .pagination-btn {
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+            background: white;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .pagination-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .pagination-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Cart Modal */
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .cart-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .cart-items {
+            margin-bottom: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #e0e0e0;
+            background: white;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .cart-total {
+            font-size: 1.2em;
+            font-weight: 700;
+            text-align: right;
+            margin-bottom: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 1.1em;
+            transition: background 0.3s;
+        }
+
+        .checkout-btn:hover {
+            background: #c0392b;
+        }
+
+        /* Checkout Modal */
+        .checkout-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1001;
+        }
+
+        .checkout-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .checkout-form {
+            display: grid;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .place-order-btn {
+            padding: 15px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 1.1em;
+            transition: background 0.3s;
+        }
+
+        .place-order-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--text-color);
+            color: white;
+            padding: 40px 0;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .footer-section p, .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            line-height: 1.6;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-menu {
+                gap: 15px;
+            }
+
+            .products-grid.grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+
+            .products-grid.masonry {
+                columns: 2;
+            }
+
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .filters {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .products-grid.masonry {
+                columns: 1;
+            }
+
+            .cart-content, .checkout-content {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading">
+        <div class="spinner"></div>
+        <span>Loading your store...</span>
+    </div>
+
+    <!-- Main Website Content -->
+    <div id="website-content" style="display: none;">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="store-info">
+                    <h1 id="store-name">Store Name</h1>
+                    <p id="store-description" class="store-description">Store Description</p>
+                </div>
+                <nav>
+                    <ul class="nav-menu">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#products">Products</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="cart-icon" onclick="toggleCart()">
+                    🛒
+                    <span class="cart-count" id="cart-count">0</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Search and Filters Section -->
+            <section class="search-section" id="search-section">
+                <div class="search-bar">
+                    <input type="text" class="search-input" id="search-input" placeholder="Search products...">
+                    <button class="search-btn" onclick="searchProducts()">Search</button>
+                </div>
+                <div class="filters" id="filters">
+                    <select class="filter-select" id="sort-select" onchange="sortProducts()">
+                        <option value="">Sort by</option>
+                        <option value="name">Name</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="newest">Newest</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- Products Section -->
+            <section id="products-section">
+                <div class="products-grid grid" id="products-grid">
+                    <!-- Products will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination">
+                <!-- Pagination will be generated here -->
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 id="footer-store-name">Store Name</h3>
+                    <p id="footer-store-description">Store Description</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <p id="contact-email">Email: contact@store.com</p>
+                    <p id="contact-phone">Phone: +1 234 567 890</p>
+                    <p id="contact-address">Address: 123 Store St, City, Country</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <div class="social-links" id="social-links">
+                        <!-- Social links will be added here -->
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2>Shopping Cart</h2>
+                <button class="close-cart" onclick="toggleCart()">×</button>
+            </div>
+            <div class="cart-items" id="cart-items">
+                <!-- Cart items will be displayed here -->
+            </div>
+            <div class="cart-total" id="cart-total">Total: $0.00</div>
+            <button class="checkout-btn" onclick="openCheckout()">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="checkout-modal" id="checkout-modal">
+        <div class="checkout-content">
+            <div class="cart-header">
+                <h2>Checkout</h2>
+                <button class="close-cart" onclick="closeCheckout()">×</button>
+            </div>
+            <form class="checkout-form" id="checkout-form">
+                <div class="form-group">
+                    <label for="customer-name">Full Name</label>
+                    <input type="text" id="customer-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="customer-email">Email</label>
+                    <input type="email" id="customer-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="customer-phone">Phone</label>
+                    <input type="tel" id="customer-phone">
+                </div>
+                <div class="form-group">
+                    <label for="customer-address">Address</label>
+                    <input type="text" id="customer-address" required>
+                </div>
+                <div class="cart-total" id="checkout-total">Total: $0.00</div>
+                <button type="submit" class="place-order-btn">Place Order</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom JavaScript will be injected here -->
+    <script id="custom-js"></script>
+
+    <!-- Main Application Script -->
+    <script>
+        // Global variables
+        let storeConfig = {};
+        let products = [];
+        let cart = [];
+        let currentPage = 1;
+        let totalPages = 1;
+        let searchTerm = '';
+        let sortBy = '';
+
+        // Initialize the application
+        async function initializeApp() {
+            try {
+                // Get tenant from URL
+                const hostname = window.location.hostname;
+                const tenant = hostname.split('.')[0];
+                
+                // Load storefront configuration
+                await loadStorefrontConfig(tenant);
+                
+                // Load products
+                await loadProducts();
+                
+                // Hide loading screen and show content
+                document.getElementById('loading-screen').style.display = 'none';
+                document.getElementById('website-content').style.display = 'block';
+                
+                // Initialize analytics
+                initializeAnalytics();
+                
+            } catch (error) {
+                console.error('Failed to initialize app:', error);
+                document.getElementById('loading-screen').innerHTML = 
+                    '<span style="color: red;">Failed to load store. Please try again.</span>';
+            }
+        }
+
+        // Load storefront configuration
+        async function loadStorefrontConfig(tenant) {
+            const response = await fetch(`http://localhost:8000/api/storefront/config/`, {
+                headers: {
+                    'X-Tenant-ID': tenant
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error('Failed to load storefront configuration');
+            }
+            
+            const data = await response.json();
+            storeConfig = data.storefront;
+            
+            // Apply configuration
+            applyStorefrontConfig();
+        }
+
+        // Apply storefront configuration
+        function applyStorefrontConfig() {
+            // Update page metadata
+            document.getElementById('page-title').textContent = storeConfig.store_name;
+            document.getElementById('page-description').content = storeConfig.seo.meta_description;
+            document.getElementById('page-keywords').content = storeConfig.seo.meta_keywords;
+            
+            if (storeConfig.store_favicon_url) {
+                document.getElementById('favicon').href = storeConfig.store_favicon_url;
+            }
+            
+            // Update store information
+            document.getElementById('store-name').textContent = storeConfig.store_name;
+            document.getElementById('store-description').textContent = storeConfig.store_description;
+            document.getElementById('footer-store-name').textContent = storeConfig.store_name;
+            document.getElementById('footer-store-description').textContent = storeConfig.store_description;
+            
+            // Update contact information
+            if (storeConfig.contact.email) {
+                document.getElementById('contact-email').textContent = `Email: ${storeConfig.contact.email}`;
+            }
+            if (storeConfig.contact.phone) {
+                document.getElementById('contact-phone').textContent = `Phone: ${storeConfig.contact.phone}`;
+            }
+            if (storeConfig.contact.address) {
+                document.getElementById('contact-address').textContent = `Address: ${storeConfig.contact.address}`;
+            }
+            
+            // Update social links
+            const socialLinks = document.getElementById('social-links');
+            socialLinks.innerHTML = '';
+            
+            if (storeConfig.social_media.facebook) {
+                socialLinks.innerHTML += `<a href="${storeConfig.social_media.facebook}" target="_blank">📘</a>`;
+            }
+            if (storeConfig.social_media.twitter) {
+                socialLinks.innerHTML += `<a href="${storeConfig.social_media.twitter}" target="_blank">🐦</a>`;
+            }
+            if (storeConfig.social_media.instagram) {
+                socialLinks.innerHTML += `<a href="${storeConfig.social_media.instagram}" target="_blank">📷</a>`;
+            }
+            if (storeConfig.social_media.linkedin) {
+                socialLinks.innerHTML += `<a href="${storeConfig.social_media.linkedin}" target="_blank">💼</a>`;
+            }
+            
+            // Apply theme colors
+            const root = document.documentElement;
+            root.style.setProperty('--primary-color', storeConfig.theme_config.colors.primary);
+            root.style.setProperty('--secondary-color', storeConfig.theme_config.colors.secondary);
+            root.style.setProperty('--accent-color', storeConfig.theme_config.colors.accent);
+            root.style.setProperty('--background-color', storeConfig.theme_config.colors.background);
+            root.style.setProperty('--text-color', storeConfig.theme_config.colors.text);
+            
+            // Apply layout settings
+            const productsGrid = document.getElementById('products-grid');
+            productsGrid.className = `products-grid ${storeConfig.theme_config.layout.type}`;
+            
+            // Show/hide features based on configuration
+            const searchSection = document.getElementById('search-section');
+            searchSection.style.display = storeConfig.theme_config.features.search ? 'block' : 'none';
+            
+            const filters = document.getElementById('filters');
+            filters.style.display = storeConfig.theme_config.features.filters ? 'block' : 'none';
+            
+            // Apply custom CSS
+            if (storeConfig.custom_css) {
+                document.getElementById('custom-css').textContent = storeConfig.custom_css;
+            }
+            
+            // Apply custom JavaScript
+            if (storeConfig.custom_js) {
+                document.getElementById('custom-js').textContent = storeConfig.custom_js;
+            }
+        }
+
+        // Load products
+        async function loadProducts() {
+            const hostname = window.location.hostname;
+            const tenant = hostname.split('.')[0];
+            
+            const response = await fetch(`http://localhost:8000/api/storefront/products/?page=${currentPage}`, {
+                headers: {
+                    'X-Tenant-ID': tenant
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error('Failed to load products');
+            }
+            
+            const data = await response.json();
+            products = data.products;
+            totalPages = data.pagination.total_pages;
+            
+            renderProducts();
+            renderPagination();
+        }
+
+        // Render products
+        function renderProducts() {
+            const productsGrid = document.getElementById('products-grid');
+            productsGrid.innerHTML = '';
+            
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.onclick = () => addToCart(product);
+                
+                let imageHtml = '';
+                if (storeConfig.theme_config.layout.show_images && product.image_url) {
+                    imageHtml = `<div class="product-image" style="background-image: url('${product.image_url}')"></div>`;
+                } else {
+                    imageHtml = `<div class="product-image">📦</div>`;
+                }
+                
+                let descriptionHtml = '';
+                if (storeConfig.theme_config.layout.show_descriptions && product.description) {
+                    descriptionHtml = `<div class="product-description">${product.description}</div>`;
+                }
+                
+                let priceHtml = '';
+                if (storeConfig.theme_config.layout.show_prices) {
+                    priceHtml = `<div class="product-price">$${product.price.toFixed(2)}</div>`;
+                }
+                
+                productCard.innerHTML = `
+                    ${imageHtml}
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        ${descriptionHtml}
+                        ${priceHtml}
+                        <div class="product-stock">Stock: ${product.stock}</div>
+                        <button class="add-to-cart-btn" ${product.stock <= 0 ? 'disabled' : ''}>
+                            ${product.stock <= 0 ? 'Out of Stock' : 'Add to Cart'}
+                        </button>
+                    </div>
+                `;
+                
+                productsGrid.appendChild(productCard);
+            });
+        }
+
+        // Render pagination
+        function renderPagination() {
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+            
+            if (totalPages <= 1) return;
+            
+            // Previous button
+            if (currentPage > 1) {
+                const prevBtn = document.createElement('button');
+                prevBtn.className = 'pagination-btn';
+                prevBtn.textContent = '← Previous';
+                prevBtn.onclick = () => {
+                    currentPage--;
+                    loadProducts();
+                };
+                pagination.appendChild(prevBtn);
+            }
+            
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+                    const pageBtn = document.createElement('button');
+                    pageBtn.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
+                    pageBtn.textContent = i;
+                    pageBtn.onclick = () => {
+                        currentPage = i;
+                        loadProducts();
+                    };
+                    pagination.appendChild(pageBtn);
+                } else if (i === currentPage - 3 || i === currentPage + 3) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.textContent = '...';
+                    ellipsis.style.padding = '10px 15px';
+                    pagination.appendChild(ellipsis);
+                }
+            }
+            
+            // Next button
+            if (currentPage < totalPages) {
+                const nextBtn = document.createElement('button');
+                nextBtn.className = 'pagination-btn';
+                nextBtn.textContent = 'Next →';
+                nextBtn.onclick = () => {
+                    currentPage++;
+                    loadProducts();
+                };
+                pagination.appendChild(nextBtn);
+            }
+        }
+
+        // Cart functions
+        function addToCart(product) {
+            if (product.stock <= 0) return;
+            
+            const existingItem = cart.find(item => item.id === product.id);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    quantity: 1
+                });
+            }
+            
+            updateCartDisplay();
+        }
+
+        function updateCartDisplay() {
+            const cartCount = document.getElementById('cart-count');
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+            
+            renderCartItems();
+        }
+
+        function renderCartItems() {
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            
+            cartItems.innerHTML = '';
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p>Your cart is empty</p>';
+                cartTotal.textContent = 'Total: $0.00';
+                return;
+            }
+            
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'cart-item';
+                
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                itemElement.innerHTML = `
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">$${item.price.toFixed(2)}</div>
+                    </div>
+                    <div class="cart-item-quantity">
+                        <button class="quantity-btn" onclick="updateQuantity('${item.id}', -1)">-</button>
+                        <span>${item.quantity}</span>
+                        <button class="quantity-btn" onclick="updateQuantity('${item.id}', 1)">+</button>
+                    </div>
+                `;
+                
+                cartItems.appendChild(itemElement);
+            });
+            
+            cartTotal.textContent = `Total: $${total.toFixed(2)}`;
+        }
+
+        function updateQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    cart = cart.filter(item => item.id !== productId);
+                }
+                updateCartDisplay();
+            }
+        }
+
+        function toggleCart() {
+            const cartModal = document.getElementById('cart-modal');
+            cartModal.style.display = cartModal.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Checkout functions
+        function openCheckout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty');
+                return;
+            }
+            
+            const checkoutModal = document.getElementById('checkout-modal');
+            const checkoutTotal = document.getElementById('checkout-total');
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            checkoutTotal.textContent = `Total: $${total.toFixed(2)}`;
+            
+            checkoutModal.style.display = 'block';
+            document.getElementById('cart-modal').style.display = 'none';
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkout-modal').style.display = 'none';
+        }
+
+        // Search and filter functions
+        function searchProducts() {
+            searchTerm = document.getElementById('search-input').value;
+            currentPage = 1;
+            loadProducts();
+        }
+
+        function sortProducts() {
+            sortBy = document.getElementById('sort-select').value;
+            currentPage = 1;
+            loadProducts();
+        }
+
+        // Analytics
+        function initializeAnalytics() {
+            // Google Analytics
+            if (storeConfig.analytics.google_analytics) {
+                const script = document.getElementById('google-analytics');
+                script.src = `https://www.googletagmanager.com/gtag/js?id=${storeConfig.analytics.google_analytics}`;
+                
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', storeConfig.analytics.google_analytics);
+            }
+            
+            // Facebook Pixel
+            if (storeConfig.analytics.facebook_pixel) {
+                const script = document.getElementById('facebook-pixel');
+                script.innerHTML = `
+                    !function(f,b,e,v,n,t,s)
+                    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+                    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+                    n.queue=[];t=b.createElement(e);t.async=!0;
+                    t.src=v;s=b.getElementsByTagName(e)[0];
+                    s.parentNode.insertBefore(t,s)}(window, document,'script',
+                    'https://connect.facebook.net/en_US/fbevents.js');
+                    fbq('init', '${storeConfig.analytics.facebook_pixel}');
+                    fbq('track', 'PageView');
+                `;
+            }
+        }
+
+        // Handle checkout form submission
+        document.getElementById('checkout-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                customer_name: document.getElementById('customer-name').value,
+                customer_email: document.getElementById('customer-email').value,
+                customer_phone: document.getElementById('customer-phone').value,
+                customer_address: document.getElementById('customer-address').value,
+                total_amount: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                items: cart.map(item => ({
+                    product_id: item.id,
+                    quantity: item.quantity,
+                    price: item.price
+                }))
+            };
+            
+            try {
+                const hostname = window.location.hostname;
+                const tenant = hostname.split('.')[0];
+                
+                const response = await fetch('http://localhost:8000/api/storefront/orders/create/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Tenant-ID': tenant
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to create order');
+                }
+                
+                const result = await response.json();
+                
+                // Clear cart
+                cart = [];
+                updateCartDisplay();
+                
+                // Close checkout modal
+                closeCheckout();
+                
+                // Show success message
+                alert(`Order placed successfully! Order number: ${result.order.order_number}`);
+                
+            } catch (error) {
+                console.error('Failed to place order:', error);
+                alert('Failed to place order. Please try again.');
+            }
+        });
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const cartModal = document.getElementById('cart-modal');
+            const checkoutModal = document.getElementById('checkout-modal');
+            
+            if (event.target === cartModal) {
+                cartModal.style.display = 'none';
+            }
+            if (event.target === checkoutModal) {
+                checkoutModal.style.display = 'none';
+            }
+        }
+
+        // Initialize the application when the page loads
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+</html> 

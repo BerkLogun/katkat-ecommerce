@@ -1,0 +1,51 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: saleor
+      POSTGRES_PASSWORD: saleor
+      POSTGRES_DB: saleor
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U saleor"]
+      interval: 10s
+      retries: 5
+
+  redis:
+    image: redis:7
+    volumes:
+      - redis-data:/data
+
+  saleor:
+    build: ./saleor
+    env_file: ./envs/saleor.env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    ports:
+      - "8000:8000"
+
+  dashboard:
+    build: ./dashboard
+    env_file: ./envs/dash.env
+    depends_on:
+      saleor:
+        condition: service_started
+    ports:
+      - "9000:80"
+
+  storefront:
+    build: ./storefront
+    env_file: ./envs/storefront.env
+    depends_on:
+      saleor:
+        condition: service_started
+    ports:
+      - "3000:80"
+
+volumes:
+  db-data:
+  redis-data: 
