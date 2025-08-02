@@ -1,25 +1,32 @@
 services:
+  # Database
   db:
     image: postgres:15
     environment:
-      POSTGRES_USER: saleor
-      POSTGRES_PASSWORD: saleor
-      POSTGRES_DB: saleor
+      POSTGRES_USER: katkat
+      POSTGRES_PASSWORD: katkat
+      POSTGRES_DB: katkat
     volumes:
       - db-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U saleor"]
+      test: ["CMD-SHELL", "pg_isready -U katkat"]
       interval: 10s
       retries: 5
+    ports:
+      - "5432:5432"
 
+  # Redis for caching and sessions
   redis:
-    image: redis:7
+    image: redis:7-alpine
     volumes:
       - redis-data:/data
+    ports:
+      - "6379:6379"
 
-  saleor:
-    build: ./saleor
-    env_file: ./envs/saleor.env
+  # Backend API
+  backend:
+    build: ./backend
+    env_file: ./envs/backend.env
     depends_on:
       db:
         condition: service_healthy
@@ -27,25 +34,85 @@ services:
         condition: service_started
     ports:
       - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - static-files:/app/staticfiles
+      - media-files:/app/media
+    environment:
+      - DJANGO_SETTINGS_MODULE=core.settings
 
+  # Admin Dashboard (React)
   dashboard:
     build: ./dashboard
-    env_file: ./envs/dash.env
+    env_file: ./envs/dashboard.env
     depends_on:
-      saleor:
+      backend:
         condition: service_started
     ports:
-      - "9000:80"
+      - "3000:3000"
+    volumes:
+      - ./dashboard:/app
+      - /app/node_modules
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000/api
+      - REACT_APP_WS_URL=ws://localhost:8000/ws
 
-  storefront:
-    build: ./storefront
-    env_file: ./envs/storefront.env
+  # Storefront Builder (React)
+  storefront-builder:
+    build: ./storefront-builder
+    env_file: ./envs/storefront-builder.env
     depends_on:
-      saleor:
+      backend:
         condition: service_started
     ports:
-      - "3000:80"
+      - "3001:3000"
+    volumes:
+      - ./storefront-builder:/app
+      - /app/node_modules
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000/api
+      - REACT_APP_BUILDER_URL=http://localhost:3001
+
+  # Nginx for routing and serving storefronts
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - static-files:/var/www/static
+      - media-files:/var/www/media
+    depends_on:
+      - backend
+      - dashboard
+      - storefront-builder
+
+  # Celery for background tasks
+  celery:
+    build: ./backend
+    command: celery -A core worker -l info
+    env_file: ./envs/backend.env
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./backend:/app
+
+  # Celery beat for scheduled tasks
+  celery-beat:
+    build: ./backend
+    command: celery -A core beat -l info
+    env_file: ./envs/backend.env
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./backend:/app
 
 volumes:
   db-data:
-  redis-data: 
+  redis-data:
+  static-files:
+  media-files: 
